@@ -13,7 +13,7 @@ def login_and_download_file(url, username, password, file_suffix):
     try:
         # Log in
         WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[contains(concat( " ", @class, " " ), concat( " ", "account", " " ))]'))
+            EC.element_to_be_clickable((By.XPATH, '//*[contains(concat(" ", @class, " "), " account ")]'))
         ).click()
 
         email_input = WebDriverWait(driver, 10).until(
@@ -27,7 +27,7 @@ def login_and_download_file(url, username, password, file_suffix):
         password_input.send_keys(password)
 
         WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[contains(concat( " ", @class, " " ), concat( " ", "icon-user", " " ))]'))
+            EC.element_to_be_clickable((By.XPATH, '//*[contains(concat(" ", @class, " "), " icon-user ")]'))
         ).click()
 
         # Navigate to the desired page
@@ -46,10 +46,12 @@ def login_and_download_file(url, username, password, file_suffix):
         driver.quit()
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--username", required=True, help="Username")
-    parser.add_argument("--password", required=True, help="Password")
-    parser.add_argument("--file_suffix", required=True, help="File suffix")
+    parser = argparse.ArgumentParser(description='Login and download file using Selenium.')
+    parser.add_argument('--username', required=True, help='Username for login')
+    parser.add_argument('--password', required=True, help='Password for login')
+    parser.add_argument('--file_suffix', required=True, help='Suffix for the downloaded file')
+
     args = parser.parse_args()
 
+    # Call the login and download function with the provided arguments
     login_and_download_file("https://www.screener.in/", args.username, args.password, args.file_suffix)
