@@ -4,9 +4,11 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
 
 def login_and_download_file(url, username, password, file_suffix):
-    driver = webdriver.Chrome()
+    # Use ChromeDriverManager to handle the ChromeDriver installation
+    driver = webdriver.Chrome(ChromeDriverManager().install())
     driver.maximize_window()
     driver.get(url)
 
