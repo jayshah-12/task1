@@ -6,13 +6,15 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
 
-def login_and_download_file(url, username, password, file_suffix):
-    # Hardcoded path to ChromeDriver based on pipeline configuration
-    chrome_driver_path = "/usr/local/bin/chromedriver"
+def login_and_download_file(url, username, password, file_suffix, chrome_driver_path=None):
+    # Use the provided ChromeDriver path or default to ChromeDriverManager
+    if chrome_driver_path:
+        service = Service(chrome_driver_path)
+    else:
+        service = Service(ChromeDriverManager().install())
 
-    # Use the provided ChromeDriver path
-    service = Service(chrome_driver_path)
     driver = webdriver.Chrome(service=service)
     driver.maximize_window()
     driver.get(url)
@@ -60,8 +62,9 @@ if __name__ == '__main__':
     parser.add_argument('--username', required=True, help='Username for login')
     parser.add_argument('--password', required=True, help='Password for login')
     parser.add_argument('--file_suffix', required=True, help='Suffix for the downloaded file')
+    parser.add_argument('--chrome_driver_path', help='Path to the ChromeDriver executable', default=None)
 
     args = parser.parse_args()
 
     # Call the login and download function with the provided arguments
-    login_and_download_file("https://www.screener.in/", args.username, args.password, args.file_suffix)
+    login_and_download_file("https://www.screener.in/", args.username, args.password, args.file_suffix, args.chrome_driver_path)
