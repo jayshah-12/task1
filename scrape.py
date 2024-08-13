@@ -1,33 +1,17 @@
 import argparse
+import os
+import time
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
 
 def login_and_download_file(url, username, password, file_suffix):
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-
-    # Set up download preferences
-    download_path = "/root"  # Set download path to the home directory inside the container
-    prefs = {
-        "download.default_directory": download_path,
-        "download.prompt_for_download": False,
-        "download.directory_upgrade": True,
-        "safebrowsing.enabled": True
-    }
-    chrome_options.add_experimental_option("prefs", prefs)
-
-    # Connect to the Selenium Grid
-    driver = webdriver.Remote(
-        command_executor='http://selenium:4444/wd/hub',
-        options=chrome_options
-    )
-
+    # Use ChromeDriverManager to handle the ChromeDriver installation
+    service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=service)
     driver.maximize_window()
     driver.get(url)
 
@@ -51,9 +35,6 @@ def login_and_download_file(url, username, password, file_suffix):
             EC.element_to_be_clickable((By.XPATH, '//*[contains(concat(" ", @class, " "), " icon-user ")]'))
         ).click()
 
-        # Print message indicating successful login
-        print("Login successful!")
-
         # Navigate to the desired page
         driver.get("https://www.screener.in/company/RELIANCE/consolidated/")
         
@@ -63,8 +44,11 @@ def login_and_download_file(url, username, password, file_suffix):
         )
         download_button.click()
 
-        # Wait for download to complete (or check for a file download indication)
-        WebDriverWait(driver, 30).until(EC.staleness_of(download_button))  # Wait until the button is no longer clickable
+        # Wait for the download to complete
+        time.sleep(30)  # Adjust based on expected download time
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
     finally:
         driver.quit()
