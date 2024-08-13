@@ -9,8 +9,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
 def login_and_download_file(url, username, password, file_suffix):
-    # Use ChromeDriverManager to handle the ChromeDriver installation
-    service = Service(ChromeDriverManager().install())
+    # Hardcoded path to ChromeDriver based on pipeline configuration
+    chrome_driver_path = "/usr/local/bin/chromedriver"
+
+    # Use the provided ChromeDriver path
+    service = Service(chrome_driver_path)
     driver = webdriver.Chrome(service=service)
     driver.maximize_window()
     driver.get(url)
