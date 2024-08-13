@@ -6,7 +6,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
 
 def login_and_download_file(url, username, password, file_suffix):
     # Hardcoded path to ChromeDriver based on pipeline configuration
