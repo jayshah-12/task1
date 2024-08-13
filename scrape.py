@@ -7,6 +7,13 @@ def login_and_download_file(url, username, password, file_suffix):
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
+
+    download_path = "/root"  # Set download path to the home directory inside the container
+    prefs = {
+        "download.default_directory": download_path,
+        "download.prompt_for_download": False,
+        "download.directory_upgrade": True,
+        "safebrowsing.enabled": True
     
     # Connect to the Selenium Grid
     driver = webdriver.Remote(
