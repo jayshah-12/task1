@@ -4,8 +4,8 @@ import pandas as pd
 from bs4 import BeautifulSoup
 
 # Retrieve credentials from environment variables
-username = os.getenv('USERNAME')
-password = os.getenv('PASSWORD')
+username = jayshah36262@gmail.com
+password = Jayshah12
 
 if not username or not password:
     raise ValueError("Username or Password environment variables are not set.")
