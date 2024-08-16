@@ -1,69 +1,92 @@
 import os
-import requests
 import pandas as pd
+from sqlalchemy import create_engine
 from bs4 import BeautifulSoup
+import requests
 
-# Retrieve credentials from environment variables
-username = "jayshah36262@gmail.com"
-password = "Jayshah12"
+# Define environment variables
+username = 'jayshah36262@gmail.com'
+password = 'Jayshah12'
 
-if not username or not password:
-    raise ValueError("Username or Password environment variables are not set.")
+# Define MySQL connection parameters
+mysql_user = os.getenv('MYSQL_USER', 'root')
+mysql_password = os.getenv('MYSQL_PASSWORD', 'root')
+mysql_host = '192.168.3.112'
+mysql_database = os.getenv('MYSQL_DATABASE', 'my_db')
 
-# Start a session
+# Create SQLAlchemy engine for MySQL
+engine = create_engine(f'mysql+mysqlconnector://{mysql_user}:{mysql_password}@{mysql_host}/{mysql_database}')
+
+# Fetch data
 session = requests.Session()
-
-# Get the login page to retrieve the CSRF token
 login_url = "https://www.screener.in/login/?"
 login_page = session.get(login_url)
 soup = BeautifulSoup(login_page.content, 'html.parser')
 
-# Find the CSRF token in the login form (usually in a hidden input field)
+# Find the CSRF token
 csrf_token = soup.find('input', {'name': 'csrfmiddlewaretoken'})['value']
-
-# Prepare the login payload
 login_payload = {
     'username': username,
     'password': password,
     'csrfmiddlewaretoken': csrf_token
 }
 
-# Include the Referer header as required
 headers = {
     'Referer': login_url,
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36'
+    'User-Agent': 'Mozilla/5.0'
 }
 
-# Send the login request
+# Perform login
 response = session.post(login_url, data=login_payload, headers=headers)
-print(response.url)
+print(f"Login response URL: {response.url}")
 
-# Check if login was successful
 if response.url == "https://www.screener.in/dash/":
-    print("Login successful")
-    
-    # Now navigate to the Reliance company page
     search_url = "https://www.screener.in/company/RELIANCE/consolidated/"
     search_response = session.get(search_url)
+    
     if search_response.status_code == 200:
-        print("Reliance data retrieved successfully")
         soup = BeautifulSoup(search_response.content, 'html.parser')
-
         table = soup.find('table', {'class': 'data-table responsive-text-nowrap'})
-        headers = [th.text.strip() for th in table.find_all('th')]
+        
+        if table:
+            headers = [th.text.strip() for th in table.find_all('th')]
+            rows = table.find_all('tr')
+            row_data = [[col.text.strip() for col in row.find_all('td')] for row in rows[1:]]
+            
+            # Create DataFrame
+            df = pd.DataFrame(row_data, columns=headers)
+            print("DataFrame created:")
+            print(df.head())  # Print the first few rows for inspection
 
-        rows = table.find_all('tr')
-        row_data = []
+            # Save to CSV
+            df.to_csv('profit_and_loss.csv', index=False)
+            print("CSV created successfully.")
 
-        for row in rows[1:]:
-            cols = row.find_all('td')
-            cols = [col.text.strip() for col in cols]
-            row_data.append(cols)
+            # Print DataFrame schema for debugging
+            print("DataFrame schema:")
+            print(df.dtypes)
+            print("Column names:")
+            print(df.columns)
 
-        df = pd.DataFrame(row_data, columns=headers)
-        print(df)
-        df.to_csv('profit_and_loss.csv', index=False)
+            # Handle empty or invalid column names
+            if df.columns[0] == '':
+                df = df.iloc[:, 1:]
+                headers = headers[1:]
+            
+            df.columns = [col.strip().replace(' ', '_').replace('-', '_') or f'col_{i}' for i, col in enumerate(headers)]
+            
+            print("Sanitized column names:")
+            print(df.columns)
+
+            # Load CSV into MySQL
+            try:
+                df.to_sql('test', con=engine, if_exists='replace', index=False)
+                print("Data successfully loaded into MySQL.")
+            except Exception as e:
+                print(f"Error loading data into MySQL: {e}")
+        else:
+            print("Failed to find the data table.")
     else:
-        print("Failed to retrieve Reliance data. Status Code:", search_response.status_code)
+        print(f"Failed to retrieve Reliance data. Status Code: {search_response.status_code}")
 else:
-    print("Login failed. Response URL:", response.url)
+    print("Login failed.")
