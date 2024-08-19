@@ -4,8 +4,8 @@ from sqlalchemy import create_engine
 from bs4 import BeautifulSoup
 import requests
 
-# Fetch username and password from environment variables
-username = "jayshah36262@gmail.com"
+
+username = os.getenv('USERNAME')
 password = "Jayshah12"
 
 # Define MySQL connection parameters
@@ -23,7 +23,7 @@ login_url = "https://www.screener.in/login/?"
 login_page = session.get(login_url)
 soup = BeautifulSoup(login_page.content, 'html.parser')
 
-# Find the CSRF token
+
 csrf_token = soup.find('input', {'name': 'csrfmiddlewaretoken'})['value']
 login_payload = {
     'username': username,
@@ -71,10 +71,10 @@ if response.url == "https://www.screener.in/dash/":
                 df.columns = ['Narration'] + df.columns[1:].tolist()
             # Drop the index column if it exists
             df = df.reset_index(drop=True)
-            # Print the DataFrame columns and the first few rows for debugging
+         
             print(df.head())
             
-            # Load DataFrame into MySQL
+
             try:
                 df.to_sql('test', con=engine, if_exists='replace', index=False)
                 print("Data successfully loaded into MySQL.")
