@@ -5,8 +5,8 @@ from bs4 import BeautifulSoup
 import requests
 
 # Fetch username and password from environment variables
-username = os.getenv('USERNAME')
-password = os.getenv('PASSWORD')
+username = "jayshah36262@gmail.com"
+password = "Jayshah12"
 
 # Define MySQL connection parameters
 mysql_user = os.getenv('MYSQL_USER', 'root')
@@ -45,40 +45,36 @@ if response.url == "https://www.screener.in/dash/":
     search_response = session.get(search_url)
     
     if search_response.status_code == 200:
+        print("Reliance data retrieved successfully")
         soup = BeautifulSoup(search_response.content, 'html.parser')
-        table = soup.find('table', {'class': 'data-table responsive-text-nowrap'})
+        # table = soup.find('table', {'class': 'data-table responsive-text-nowrap'})
+        table1 = soup.find('section', {'id': 'profit-loss'})
+        table = table1.find('table')
         
         if table:
-            headers = [th.text.strip() for th in table.find_all('th')]
+            headers = [th.text.strip() or f'Column_{i}' for i, th in enumerate(table.find_all('th'))]
             rows = table.find_all('tr')
-            row_data = [[col.text.strip() for col in row.find_all('td')] for row in rows[1:]]
+            row_data = []
             
-            # Create DataFrame
+            for row in rows[1:]:
+                cols = row.find_all('td')
+                cols = [col.text.strip() for col in cols]
+                if len(cols) == len(headers):
+                    row_data.append(cols)
+                else:
+                    print(f"Row data length mismatch: {cols}")
+            
+            # Create a DataFrame with sanitized headers
             df = pd.DataFrame(row_data, columns=headers)
-            print("DataFrame created:")
-            print(df.head())  # Print the first few rows for inspection
-
-            # Save to CSV
-            df.to_csv('profit_and_loss.csv', index=False)
-            print("CSV created successfully.")
-
-            # Print DataFrame schema for debugging
-            print("DataFrame schema:")
-            print(df.dtypes)
-            print("Column names:")
-            print(df.columns)
-
-            # Handle empty or invalid column names
-            if df.columns[0] == '':
-                df = df.iloc[:, 1:]
-                headers = headers[1:]
+            # Rename the first column to 'Narration'
+            if not df.empty:
+                df.columns = ['Narration'] + df.columns[1:].tolist()
+            # Drop the index column if it exists
+            df = df.reset_index(drop=True)
+            # Print the DataFrame columns and the first few rows for debugging
+            print(df.head())
             
-            df.columns = [col.strip().replace(' ', '_').replace('-', '_') or f'col_{i}' for i, col in enumerate(headers)]
-            
-            print("Sanitized column names:")
-            print(df.columns)
-
-            # Load CSV into MySQL
+            # Load DataFrame into MySQL
             try:
                 df.to_sql('test', con=engine, if_exists='replace', index=False)
                 print("Data successfully loaded into MySQL.")
