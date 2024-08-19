@@ -6,7 +6,7 @@ import requests
 
 
 username = os.getenv('USERNAME')
-password = "Jayshah12"
+password = os.getenv('PASSWORD')
 
 # Define MySQL connection parameters
 mysql_user = os.getenv('MYSQL_USER', 'root')
