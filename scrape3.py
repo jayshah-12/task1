@@ -1,54 +1,92 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import os
-from datetime import datetime
+import pandas as pd
+from sqlalchemy import create_engine
+from bs4 import BeautifulSoup
+import requests
 
-# Login credentials
-usernames = ["jayshah36262@gmail.com"]
-passwords = ["Jayshah12"]
+# Fetch username and password from environment variables
+username = os.getenv('USERNAME')
+password = os.getenv('PASSWORD')
 
-def login_and_download_file(url, username, password, file_suffix):
-    driver = webdriver.Chrome()
-    driver.maximize_window()
-    driver.get(url)
+# Define MySQL connection parameters
+mysql_user = os.getenv('MYSQL_USER', 'root')
+mysql_password = os.getenv('MYSQL_PASSWORD', 'root')
+mysql_host = '192.168.3.112'
+mysql_database = os.getenv('MYSQL_DATABASE', 'my_db')
 
-    try:
-        # Log in
-        WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[contains(concat( " ", @class, " " ), concat( " ", "account", " " ))]'))
-        ).click()
+# Create SQLAlchemy engine for MySQL
+engine = create_engine(f'mysql+mysqlconnector://{mysql_user}:{mysql_password}@{mysql_host}/{mysql_database}')
 
-        email_input = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//*[(@id = "id_username")]'))
-        )
-        password_input = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//*[(@id = "id_password")]'))
-        )
+# Fetch data
+session = requests.Session()
+login_url = "https://www.screener.in/login/?"
+login_page = session.get(login_url)
+soup = BeautifulSoup(login_page.content, 'html.parser')
 
-        email_input.send_keys(username)
-        password_input.send_keys(password)
+# Find the CSRF token
+csrf_token = soup.find('input', {'name': 'csrfmiddlewaretoken'})['value']
+login_payload = {
+    'username': username,
+    'password': password,
+    'csrfmiddlewaretoken': csrf_token
+}
 
-        WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[contains(concat( " ", @class, " " ), concat( " ", "icon-user", " " ))]'))
-        ).click()
+headers = {
+    'Referer': login_url,
+    'User-Agent': 'Mozilla/5.0'
+}
 
-        # Navigate to the desired page
-        driver.get("https://www.screener.in/company/FACT/")
+# Perform login
+response = session.post(login_url, data=login_payload, headers=headers)
+print(f"Login response URL: {response.url}")
+
+if response.url == "https://www.screener.in/dash/":
+    search_url = "https://www.screener.in/company/RELIANCE/consolidated/"
+    search_response = session.get(search_url)
+    
+    if search_response.status_code == 200:
+        soup = BeautifulSoup(search_response.content, 'html.parser')
+        table = soup.find('table', {'class': 'data-table responsive-text-nowrap'})
         
-        # Wait for the download button to be clickable and click it
-        download_button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, '/html/body/main/div[3]/div[1]/form/button'))
-        )
-        download_button.click()
+        if table:
+            headers = [th.text.strip() for th in table.find_all('th')]
+            rows = table.find_all('tr')
+            row_data = [[col.text.strip() for col in row.find_all('td')] for row in rows[1:]]
+            
+            # Create DataFrame
+            df = pd.DataFrame(row_data, columns=headers)
+            print("DataFrame created:")
+            print(df.head())  # Print the first few rows for inspection
 
-        # Wait for download to complete (or check for a file download indication)
-        WebDriverWait(driver, 30).until(EC.staleness_of(download_button))  # Wait until the button is no longer clickable
+            # Save to CSV
+            df.to_csv('profit_and_loss.csv', index=False)
+            print("CSV created successfully.")
 
-    finally:
-        driver.quit()
+            # Print DataFrame schema for debugging
+            print("DataFrame schema:")
+            print(df.dtypes)
+            print("Column names:")
+            print(df.columns)
 
-if __name__ == '__main__':
-    for i, (username, password) in enumerate(zip(usernames, passwords)):
-        login_and_download_file("https://www.screener.in/", username, password, i)
+            # Handle empty or invalid column names
+            if df.columns[0] == '':
+                df = df.iloc[:, 1:]
+                headers = headers[1:]
+            
+            df.columns = [col.strip().replace(' ', '_').replace('-', '_') or f'col_{i}' for i, col in enumerate(headers)]
+            
+            print("Sanitized column names:")
+            print(df.columns)
+
+            # Load CSV into MySQL
+            try:
+                df.to_sql('test', con=engine, if_exists='replace', index=False)
+                print("Data successfully loaded into MySQL.")
+            except Exception as e:
+                print(f"Error loading data into MySQL: {e}")
+        else:
+            print("Failed to find the data table.")
+    else:
+        print(f"Failed to retrieve Reliance data. Status Code: {search_response.status_code}")
+else:
+    print("Login failed.")
