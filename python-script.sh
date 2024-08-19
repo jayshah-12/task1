@@ -10,7 +10,7 @@ pip install requests pandas beautifulsoup4 mysql-connector-python sqlalchemy
 set -a
 . secrets-output/secrets.env
 set +a
-
+ls secrets-output/secrets.env
 # Change directory to where the Python script is located
 cd python-script-repo
 
