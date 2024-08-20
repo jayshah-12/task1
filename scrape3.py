@@ -1,12 +1,13 @@
 import os
 import pandas as pd
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, Integer
+from sqlalchemy.types import Integer
 from bs4 import BeautifulSoup
 import requests
 
-
-username = os.getenv('USERNAME')
-password = os.getenv('PASSWORD')
+# Fetch username and password from environment variables
+username = "jayshah36262@gmail.com"
+password = "Jayshah12"
 
 # Define MySQL connection parameters
 mysql_user = os.getenv('MYSQL_USER', 'root')
@@ -23,7 +24,7 @@ login_url = "https://www.screener.in/login/?"
 login_page = session.get(login_url)
 soup = BeautifulSoup(login_page.content, 'html.parser')
 
-
+# Extract CSRF token
 csrf_token = soup.find('input', {'name': 'csrfmiddlewaretoken'})['value']
 login_payload = {
     'username': username,
@@ -47,7 +48,6 @@ if response.url == "https://www.screener.in/dash/":
     if search_response.status_code == 200:
         print("Reliance data retrieved successfully")
         soup = BeautifulSoup(search_response.content, 'html.parser')
-        # table = soup.find('table', {'class': 'data-table responsive-text-nowrap'})
         table1 = soup.find('section', {'id': 'profit-loss'})
         table = table1.find('table')
         
@@ -68,16 +68,18 @@ if response.url == "https://www.screener.in/dash/":
             df = pd.DataFrame(row_data, columns=headers)
             # Rename the first column to 'Narration'
             if not df.empty:
-                df.columns = ['Narration'] + df.columns[1:].tolist()
+                df.columns = ['Columns'] + df.columns[1:].tolist()
             # Drop the index column if it exists
             df = df.reset_index(drop=True)
-         
+            
+            # Add an index column and set it as a primary key
+            df.insert(0, 'id', range(1, len(df) + 1))
+
             print(df.head())
             
-
             try:
-                df.to_sql('test', con=engine, if_exists='replace', index=False)
-                print("Data successfully loaded into MySQL.")
+                df.to_sql('test', con=engine, if_exists='replace', index=False, dtype={'id': Integer()})
+                print("Data successfully loaded into MySQL with 'id' as the primary key.")
             except Exception as e:
                 print(f"Error loading data into MySQL: {e}")
         else:
