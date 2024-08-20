@@ -19,7 +19,7 @@ def login_and_download_file(url, username, password, file_suffix):
     chrome_options.add_argument('--disable-dev-shm-usage')  # Disable shared memory usage
 
     # Path to ChromeDriver (add if not included in PATH)
-    service = Service('/chromedriver-linux64/chromedriver')
+    service = Service('usr/local/bin/chromedriver-linux64/chromedriver')
 
     driver = webdriver.Chrome(service=service, options=chrome_options)
     driver.maximize_window()
