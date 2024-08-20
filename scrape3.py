@@ -66,7 +66,7 @@ if response.url == "https://www.screener.in/dash/":
             
             # Create a DataFrame with sanitized headers
             df = pd.DataFrame(row_data, columns=headers)
-            # Rename the first column to 'Narration'
+           
             if not df.empty:
                 df.columns = ['Columns'] + df.columns[1:].tolist()
             # Drop the index column if it exists
@@ -79,7 +79,7 @@ if response.url == "https://www.screener.in/dash/":
             
             try:
                 df.to_sql('test', con=engine, if_exists='replace', index=False, dtype={'id': Integer()})
-                print("Data successfully loaded into MySQL with 'id' as the primary key.")
+                print("Data successfully loaded into MySQL .")
             except Exception as e:
                 print(f"Error loading data into MySQL: {e}")
         else:
