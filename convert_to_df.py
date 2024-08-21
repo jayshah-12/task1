@@ -1,10 +1,9 @@
 import pandas as pd
 import os
 
-# Define the file path
 file_path = 'Reliance Industr.xlsx'
 
-# Check if the file exists
+
 if os.path.exists(file_path):
     # Load the Excel file into a Pandas DataFrame
     df = pd.read_excel(file_path)
