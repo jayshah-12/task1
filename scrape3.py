@@ -71,6 +71,10 @@ if response.url == "https://www.screener.in/dash/":
                 df.columns = ['Columns'] + df.columns[1:].tolist()
             # Drop the index column if it exists
             df = df.reset_index(drop=True)
+
+            df = pd.melt(df, id_vars=['Narration'], var_name='Year', value_name='Value')
+            df = df.sort_values(by=['Narration', 'Year']).reset_index(drop=True)
+            # print(df.head())
             
             # Add an index column and set it as a primary key
             df.insert(0, 'id', range(1, len(df) + 1))
