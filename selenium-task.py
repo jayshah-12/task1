@@ -17,7 +17,7 @@ def login_and_download_file(url, username, password, file_suffix):
     chrome_options.add_argument('--headless')  # Run in headless mode
     chrome_options.add_argument('--no-sandbox')  # Disable sandboxing
     chrome_options.add_argument('--disable-dev-shm-usage')  # Disable shared memory usage
-
+    0ptions.binary_location='/opt/google/Chrome/Application/chrome.exe'
     # Path to ChromeDriver (add if not included in PATH)
     service = Service('/usr/local/bin/chromedriver-linux64/chromedriver')
 
