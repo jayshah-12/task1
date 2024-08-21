@@ -22,7 +22,7 @@ def login_and_download_file(url, username, password, file_suffix):
     service = Service('/usr/local/bin/chromedriver-linux64/chromedriver')
 
     driver = webdriver.Chrome(service=service, options=chrome_options)
-    driver.maximize_window()
+    # driver.maximize_window()
     driver.get(url)
 
     try:
