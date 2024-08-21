@@ -53,7 +53,7 @@ def login_and_download_file(url, username, password, file_suffix):
         driver.execute_script("arguments[0].click();", download_button)
         print("Download button clicked.")
         driver.save_screenshot('after_click.png')
-        download_dir = r"C:\Users\Dhruv Gogri\Desktop"
+        download_dir = r"C:\Users\Jay Shah\Desktop"
         file_name = "profit_and_loss.xlsx"
         print("Files in download directory before wait:", os.listdir(download_dir))
         if wait_for_file(download_dir, file_name):
