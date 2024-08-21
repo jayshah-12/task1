@@ -7,8 +7,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 import time
 import os
-usernames = ["jayshah36262@gmail.com"]
-passwords = ["Jayshah12"]
+usernames = os.getenv("USERNAME")
+passwords = os.getenv("PASSWORD")
 def login_and_download_file(url, username, password, file_suffix):
     chrome_options = Options()
     chrome_options.add_argument("--headless")
