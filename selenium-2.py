@@ -43,8 +43,7 @@ def login_and_download_file(url, username, password, file_suffix):
         password_input.send_keys(password)
         password_input.send_keys(Keys.RETURN)
         driver.save_screenshot('after_login.png')
-        driver.get("
-https://www.screener.in/company/RELIANCE/consolidated/")
+        driver.get("https://www.screener.in/company/RELIANCE/consolidated/")
 
         download_button = WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.XPATH, '//button[@aria-label="Export to Excel"]'))
@@ -79,6 +78,4 @@ def wait_for_file(download_dir, file_name, timeout=120):
    return False
 if __name__ == '__main__':
     for i, (username, password) in enumerate(zip(usernames, passwords)):
-        login_and_download_file("
-https://www.screener.in/"
-, username, password, i)
+        login_and_download_file("https://www.screener.in/", username, password, i)
