@@ -7,8 +7,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 import time
 import os
-usernames = ["dhruvgogri014@gmail.com"]
-passwords = ["Dg9892211065@"]
+usernames = ["jayshah36262@gmail.com"]
+passwords = ["Jayshah12"]
 def login_and_download_file(url, username, password, file_suffix):
     chrome_options = Options()
     chrome_options.add_argument("--headless")
@@ -17,7 +17,7 @@ def login_and_download_file(url, username, password, file_suffix):
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--window-size=1920,1080")
     prefs = {
-        "download.default_directory": r"C:\Users\Dhruv Gogri\Desktop",
+        "download.default_directory": r"C:\Users\Jay Shah\Desktop",
         "download.prompt_for_download": False,
         "download.directory_upgrade": True,
         "safebrowsing.enabled": True
