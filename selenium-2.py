@@ -7,8 +7,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 import time
 import os
-usernames = os.getenv("USERNAME","jayshah36262@gmail.com")
-passwords = os.getenv("PASSWORD","Jayshah12")
+usernames = ["jayshah36262@gmail.com"]
+passwords = ["Jayshah12"]
 def login_and_download_file(url, username, password, file_suffix):
     chrome_options = Options()
     chrome_options.add_argument("--headless")
@@ -60,7 +60,7 @@ def login_and_download_file(url, username, password, file_suffix):
         if wait_for_file(download_dir, file_name):
             print("File downloaded successfully.")
         else:
-            print("File downloaded ")
+            print("File download failed or timeout.")
     except Exception as e:
         driver.save_screenshot('error_screenshot.png')
         print(f"Error: {e}")
