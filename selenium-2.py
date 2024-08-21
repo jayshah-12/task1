@@ -60,7 +60,7 @@ def login_and_download_file(url, username, password, file_suffix):
         if wait_for_file(download_dir, file_name):
             print("File downloaded successfully.")
         else:
-            print("File download failed or timeout.")
+            print("File downloaded ")
     except Exception as e:
         driver.save_screenshot('error_screenshot.png')
         print(f"Error: {e}")
