@@ -30,7 +30,7 @@ def login_and_download_file(url, username, password, file_suffix):
     driver.implicitly_wait(10)
     try:
         driver.get(url)
-        driver.save_screenshot('before_login.png')
+        # driver.save_screenshot('before_login.png')
         WebDriverWait(driver, 20).until(
             EC.element_to_be_clickable((By.XPATH, '//*[contains(@class, "account")]'))
         ).click()
@@ -43,7 +43,7 @@ def login_and_download_file(url, username, password, file_suffix):
         email_input.send_keys(username)
         password_input.send_keys(password)
         password_input.send_keys(Keys.RETURN)
-        driver.save_screenshot('after_login.png')
+        # driver.save_screenshot('after_login.png')
         driver.get("https://www.screener.in/company/RELIANCE/consolidated/")
 
         download_button = WebDriverWait(driver, 20).until(
@@ -57,12 +57,12 @@ def login_and_download_file(url, username, password, file_suffix):
         download_dir = current_dir
         file_name = "profit_and_loss.xlsx"
         print("Files in download directory before wait:", os.listdir(download_dir))
-        if wait_for_file(download_dir, file_name):
-            print("File downloaded successfully.")
-        else:
-            print("File download failed or timeout.")
+        # if wait_for_file(download_dir, file_name):
+        #     print("File downloaded successfully.")
+        # else:
+        #     print("File download failed or timeout.")
     except Exception as e:
-        driver.save_screenshot('error_screenshot.png')
+        # driver.save_screenshot('error_screenshot.png')
         print(f"Error: {e}")
         raise e
     finally:
