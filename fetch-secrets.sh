@@ -1,11 +1,5 @@
 
 
-
-sudo apt-get update
-
-# Install git
-sudo apt-get install -y git
-
 # Set Vault address and token
 export VAULT_ADDR='http://192.168.3.112:8200'
 export VAULT_TOKEN='root'
@@ -29,7 +23,3 @@ ls -l secrets-output
 # Debugging: Print the contents of the secrets file
 echo "Contents of secrets.env:"
 cat secrets-output/secrets.env
-
-# Stage and commit the secrets.env file to Git
-git add secrets-output/secrets.env
-git commit -m "Add secrets.env file"
