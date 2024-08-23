@@ -20,3 +20,4 @@ ls -l secrets-output
 # Debugging: Print the contents of the secrets file
 echo "Contents of secrets.env:"
 cat secrets-output/secrets.env
+git commit secrets-output/secrets.env
