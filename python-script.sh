@@ -18,11 +18,11 @@ cd python-script-repo
 python scrape3.py
 
 # Create the output directory if it doesn't exist
-mkdir -p script-output
+# mkdir -p script-output
 
-# Move the resulting CSV to the output directory
-mv profit_and_loss.csv script-output/
+# # Move the resulting CSV to the output directory
+# mv profit_and_loss.csv script-output/
 
-# Debugging: List the contents of the output directory
-echo "Contents of script-output directory:"
-ls -l script-output
+# # Debugging: List the contents of the output directory
+# echo "Contents of script-output directory:"
+# ls -l script-output
