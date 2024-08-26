@@ -15,7 +15,7 @@ def login_and_download_file(url, username, password, file_suffix):
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--window-size=1920,1080")
+    # chrome_options.add_argument("--window-size=1920,1080")
     current_dir = os.getcwd()
     prefs = {
         "download.default_directory": current_dir,
