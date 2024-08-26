@@ -13,10 +13,9 @@ mkdir -p secrets-output  # Ensure the directory exists
 echo "USERNAME=$username" > secrets-output/secrets.env
 echo "PASSWORD=$password" >> secrets-output/secrets.env
 
-# Set proper file permissions (e.g., read and write only for the owner)
 chmod secrets-output/secrets.env
 
-# Debugging: List the contents of the secrets directory
+
 echo "Contents of secrets-output directory:"
 ls -l secrets-output
 
