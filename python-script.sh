@@ -15,7 +15,7 @@ ls secrets-output/secrets.env
 cd python-script-repo
 
 # Run the Python script with environment variables
-python scrape3.py
+python test.py
 
 
 
