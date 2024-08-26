@@ -13,7 +13,7 @@ password = os.getenv('SCRAPER_PASSWORD', 'Jayshah12')
 # Define MySQL connection parameters
 mysql_user = os.getenv('MYSQL_USER', 'root')
 mysql_password = os.getenv('MYSQL_PASSWORD', 'root')
-mysql_host = os.getenv('MYSQL_HOST', 'localhost:3307')
+mysql_host = os.getenv('MYSQL_HOST', '192.168.3.112:3307')
 mysql_database = os.getenv('MYSQL_DATABASE', 'my_db')
 
 # Create SQLAlchemy engine for MySQL
