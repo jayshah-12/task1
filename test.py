@@ -6,22 +6,22 @@ from bs4 import BeautifulSoup
 import requests
 import time
 
-# Fetch username and password from environment variables
+
 username = os.getenv('SCRAPER_USERNAME', 'jayshah36262@gmail.com')
 password = os.getenv('SCRAPER_PASSWORD', 'Jayshah12')
 
-# Define MySQL connection parameters
+
 mysql_user = os.getenv('MYSQL_USER', 'root')
 mysql_password = os.getenv('MYSQL_PASSWORD', 'root')
-mysql_host = os.getenv('MYSQL_HOST', '192.168.3.112:3307')
+mysql_host = os.getenv('MYSQL_HOST', 'localhost:3307')
 mysql_database = os.getenv('MYSQL_DATABASE', 'my_db')
 
 # Create SQLAlchemy engine for MySQL
 engine = create_engine(f'mysql+mysqlconnector://{mysql_user}:{mysql_password}@{mysql_host}/{mysql_database}')
 
-# Read the CSV file containing company names and symbols
-companies_df = pd.read_csv('company.csv')  # Assuming the CSV file is named 'company.csv'
-print(companies_df.columns)
+
+companies_df = pd.read_csv('company.csv')  
+# print(companies_df.columns)
 
 # Initialize a session
 session = requests.Session()
@@ -96,7 +96,7 @@ if response.url == "https://www.screener.in/dash/":
                         data['Company_Id'] = comp_id
                         data['value_type'] = data['Narration'].apply(lambda x: 'percent' if '%' in x else 'crore')
                         # Process the 'ttm' DataFrame
-                        ttm = df[['Narration', 'TTM']].copy()  # Make a copy to avoid the warning
+                        ttm = df[['Narration', 'TTM']].copy() 
                         ttm['TTM'] = ttm['TTM'].str.replace(',', '').str.replace('%', '') 
                         # ttm.insert(0, 'id2', range(1, len(ttm) + 1))
                         ttm['Company_Id'] = comp_id
@@ -106,11 +106,11 @@ if response.url == "https://www.screener.in/dash/":
                         # ttm = ttm.drop(columns=['id2'])
                         combined_data = pd.concat([combined_data, data], ignore_index=True)
                         combined_ttm = pd.concat([combined_ttm, ttm], ignore_index=True)
-                        combined_company = pd.concat([combined_company, pd.DataFrame({'Company_Name': [company_name], 'Company_ID': [comp_id]})], ignore_index=True)
-                        print(combined_data)
-                    except KeyError as e:
-                        print(f"Column 'TTM' not found in DataFrame for symbol {symbol}: {e}")
-                        continue
+                        combined_company = pd.concat([combined_company, pd.DataFrame({'Company_Name': [company_name], 'Company_Id': [comp_id]})], ignore_index=True)
+                        print(combined_company)
+                    # except KeyError as e:
+                    #     print(f"Column 'TTM' not found in DataFrame for symbol {symbol}: {e}")
+                    #     continue
                     
                     except Exception as e:
                         print(f"Error processing data for symbol {symbol}: {e}")
