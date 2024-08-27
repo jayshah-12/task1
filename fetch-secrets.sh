@@ -13,7 +13,7 @@ mkdir -p secrets-output  # Ensure the directory exists
 echo "USERNAME=$username" > secrets-output/secrets.env
 echo "PASSWORD=$password" >> secrets-output/secrets.env
 
-chmod secrets-output/secrets.env
+chmod 600 secrets-output/secrets.env
 
 
 echo "Contents of secrets-output directory:"
