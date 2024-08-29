@@ -16,5 +16,5 @@ jobs:
 
       - name: Set Concourse secrets as environment variables
         run: |
-          echo "CONCOURSE_USERNAME=${{ secrets.VAULT_ADDR }}" >> $GITHUB_ENV
-          echo "CONCOURSE_PASSWORD=${{ secrets.VAULT_TOKEN }}" >> $GITHUB_ENV
+          echo "VAULT_ADDR=${{ secrets.VAULT_ADDR }}" >> $GITHUB_ENV
+          echo "VAULT_TOKEN=${{ secrets.VAULT_TOKEN }}" >> $GITHUB_ENV
