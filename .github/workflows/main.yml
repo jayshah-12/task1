@@ -12,9 +12,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      
-
       - name: Set Concourse secrets as environment variables
         run: |
           echo "VAULT_ADDR=${{ secrets.VAULT_ADDR }}" >> $GITHUB_ENV
           echo "VAULT_TOKEN=${{ secrets.VAULT_TOKEN }}" >> $GITHUB_ENV
+
+      - name: Debugging - Print Vault Address and Token
+        run: |
+          echo "Vault Address: $VAULT_ADDR"
+          echo "Vault Token: $VAULT_TOKEN"
