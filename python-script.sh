@@ -1,5 +1,9 @@
  #!/bin/sh
+ls -l secrets-output
 
+# Debugging: Print the contents of the secrets file
+echo "Contents of secrets.env:"
+cat secrets-output/secrets.env
 
 set -a
 . secrets-output/secrets.env
