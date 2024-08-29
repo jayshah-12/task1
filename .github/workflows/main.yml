@@ -23,3 +23,5 @@ jobs:
           echo "Vault Token: $VAULT_TOKEN"
           echo "Length of VAULT_ADDR: ${#VAULT_ADDR}"
           echo "Length of VAULT_TOKEN: ${#VAULT_TOKEN}"
+      - name: Run shell script
+        run: fetch-secrets.sh
