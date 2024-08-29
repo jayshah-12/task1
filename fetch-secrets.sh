@@ -9,6 +9,17 @@ echo "VAULT_ADDR=${{ secrets.VAULT_ADDR }}" >> $GITHUB_ENV
 echo "VAULT_TOKEN=${{ secrets.VAULT_TOKEN }}" >> $GITHUB_ENV
 # echo "VAULT_SECRET=${{ secrets.VAULT_SECRET }}" >> $GITHUB_ENV
 
+
+if [ -z "$VAULT_ADDR" ]; then
+  echo "Error: VAULT_ADDR is not set."
+  exit 1
+fi
+
+if [ -z "$VAULT_TOKEN" ]; then
+  echo "Error: VAULT_TOKEN is not set."
+  exit 1
+fi
+
 # Fetch secrets from Vault
 username=$(vault kv get -field=username secret/myapp)
 password=$(vault kv get -field=password secret/myapp)
