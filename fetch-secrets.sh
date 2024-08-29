@@ -4,6 +4,8 @@ cd python-script-repo
 export VAULT_ADDR=${VAULT_ADDR}
 export VAULT_TOKEN=${VAULT_TOKEN}
 
+echo "VAULT_SECRET=${{ secrets.VAULT_SECRET }}" >> $GITHUB_ENV
+
 # Fetch secrets from Vault
 username=$(vault kv get -field=username secret/myapp)
 password=$(vault kv get -field=password secret/myapp)
