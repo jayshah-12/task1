@@ -9,8 +9,7 @@ ls secrets-output/secrets.env
 
 cd python-script-repo
 # Install necessary Python libraries
-apt-get update
-apt-get install -y wget
+
 pip install --upgrade pip
 pip install -r requirements.txt
 
