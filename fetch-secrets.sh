@@ -1,14 +1,21 @@
 
 cd python-script-repo
 
-# Print the Vault Address and Token for debugging
 echo "Vault Address: $VAULT_ADDR"
 echo "Vault Token: $VAULT_TOKEN"
 
-# Ensure VAULT_ADDR and VAULT_TOKEN environment variables are correctly set
-export VAULT_ADDR=$VAULT_ADDR
-export VAULT_TOKEN=$VAULT_TOKEN
+# Check if environment variables are set
+if [ -z "$VAULT_ADDR" ] || [ -z "$VAULT_TOKEN" ]; then
+    echo "Error: VAULT_ADDR or VAULT_TOKEN is not set."
+    exit 1
+fi
 
+# Export environment variables
+export VAULT_ADDR="$VAULT_ADDR"
+export VAULT_TOKEN="$VAULT_TOKEN"
+
+# Test connection to Vault
+curl --header "X-Vault-Token: $VAULT_TOKEN" "$VAULT_ADDR/v1/sys/health
 
 
 # Fetch secrets from Vault
