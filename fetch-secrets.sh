@@ -1,12 +1,15 @@
 
 cd python-script-repo
 
+# Print the Vault Address and Token for debugging
 echo "Vault Address: $VAULT_ADDR"
 echo "Vault Token: $VAULT_TOKEN"
 
-# Correctly export the environment variables
+# Ensure VAULT_ADDR and VAULT_TOKEN environment variables are correctly set
 export VAULT_ADDR=$VAULT_ADDR
 export VAULT_TOKEN=$VAULT_TOKEN
+
+
 
 # Fetch secrets from Vault
 username=$(vault kv get -field=username secret/myapp)
