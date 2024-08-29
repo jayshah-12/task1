@@ -1,5 +1,5 @@
 
-
+cd python-script-repo
 # Set Vault address and token
 export VAULT_ADDR=${VAULT_ADDR}
 export VAULT_TOKEN=${VAULT_TOKEN}
