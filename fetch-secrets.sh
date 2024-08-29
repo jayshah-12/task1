@@ -2,7 +2,7 @@
 cd python-script-repo
 # Set Vault address and token
 export VAULT_ADDR=${{ secrets.VAULT_ADDR }}
-export VAULT_TOKEN=${{ secrets.VAULT_TOKEN }}
+# export VAULT_TOKEN=${{ secrets.VAULT_TOKEN }}
 
 super_secret: ${{ secrets.SuperSecret }}
 echo "VAULT_ADDR=${{ secrets.VAULT_ADDR }}" >> $GITHUB_ENV
