@@ -1,8 +1,8 @@
 
 cd python-script-repo
 # Set Vault address and token
-VAULT_ADDR=${{ secrets.VAULT_ADDR }}
-VAULT_TOKEN=${{ secrets.VAULT_TOKEN }}
+# VAULT_ADDR=${{ secrets.VAULT_ADDR }}
+# VAULT_TOKEN=${{ secrets.VAULT_TOKEN }}
 export VAULT_ADDR
 export VAULT_TOKEN
 # super_secret: ${{ secrets.SuperSecret }}
