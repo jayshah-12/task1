@@ -8,11 +8,7 @@ echo "Vault Token: $VAULT_TOKEN"
 export VAULT_ADDR="$VAULT_ADDR"
 export VAULT_TOKEN="$VAULT_TOKEN"
 
-# Test connection to Vault
-curl --header "X-Vault-Token: $VAULT_TOKEN" "$VAULT_ADDR/v1/sys/health"
 
-# Test connection to Vault
-curl --header "X-Vault-Token: $VAULT_TOKEN" "$VAULT_ADDR/v1/sys/health
 
 
 # Fetch secrets from Vault
