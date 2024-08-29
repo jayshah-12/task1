@@ -1,5 +1,5 @@
 #!/bin/sh
-
+cd python-script-repo
 # Install necessary Python libraries
 apt-get update
 apt-get install -y wget
