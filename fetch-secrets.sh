@@ -1,8 +1,8 @@
 
 
 # Set Vault address and token
-export VAULT_ADDR='http://192.168.3.112:8200'
-export VAULT_TOKEN='root'
+export VAULT_ADDR=${VAULT_ADDR}
+export VAULT_TOKEN=${VAULT_TOKEN}
 
 # Fetch secrets from Vault
 username=$(vault kv get -field=username secret/myapp)
