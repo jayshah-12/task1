@@ -21,3 +21,5 @@ jobs:
         run: |
           echo "Vault Address: $VAULT_ADDR"
           echo "Vault Token: $VAULT_TOKEN"
+          echo "Length of VAULT_ADDR: ${#VAULT_ADDR}"
+          echo "Length of VAULT_TOKEN: ${#VAULT_TOKEN}"
