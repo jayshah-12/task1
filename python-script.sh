@@ -6,7 +6,7 @@ apt-get install -y wget
 pip install --upgrade pip
 pip install -r requirements.txt
 
-
+cd ..
 # Source the environment variables from the secrets file
 set -a
 . secrets-output/secrets.env
