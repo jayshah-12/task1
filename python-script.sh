@@ -1,23 +1,19 @@
  #!/bin/sh
 cd python-script-repo
-ls -l secrets-output
+# Install necessary Python libraries
+apt-get update
+apt-get install -y wget
+pip install --upgrade pip
+pip install -r requirements.txt
 
-# Debugging: Print the contents of the secrets file
-echo "Contents of secrets.env:"
-cat secrets-output/secrets.env
-
+cd ..
+# Source the environment variables from the secrets file
 set -a
 . secrets-output/secrets.env
 set +a
 ls secrets-output/secrets.env
-
-
+# Change directory to where the Python script is located
 cd python-script-repo
-# Install necessary Python libraries
-
-pip install --upgrade pip
-pip install -r requirements.txt
-
 
 # Run the Python script with environment variables
 python test.py
