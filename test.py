@@ -7,8 +7,8 @@ import requests
 import time
 
 
-username = os.getenv('SCRAPER_USERNAME', 'jayshah36262@gmail.com')
-password = os.getenv('SCRAPER_PASSWORD', 'Jayshah12')
+username = os.getenv('USERNAME')
+password = os.getenv('PASSWORD')
 
 
 mysql_user = os.getenv('MYSQL_USER', 'root')
