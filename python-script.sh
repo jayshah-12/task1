@@ -1,10 +1,11 @@
 #!/bin/sh
 
 # Install necessary Python libraries
-apt-get update
-apt-get install -y wget
-pip install --upgrade pip
-pip install requests pandas beautifulsoup4 mysql-connector-python sqlalchemy
+# apt-get update
+# apt-get install -y wget
+# pip install --upgrade pip
+pip install -r requirements.txt
+
 
 # Source the environment variables from the secrets file
 set -a
