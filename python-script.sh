@@ -1,4 +1,5 @@
  #!/bin/sh
+cd python-script-repo
 ls -l secrets-output
 
 # Debugging: Print the contents of the secrets file
